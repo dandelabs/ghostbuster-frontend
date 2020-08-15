@@ -1,0 +1,198 @@
+<div class="navbar-container" [class.example-is-mobile]="mobileQuery.matches">
+  <!-- Top navbar -->
+  <mat-toolbar class="navbar" color="primary">
+    <button mat-icon-button (click)="snav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <a class="navbar-brand" [routerLink]="['/']" matTooltip="Home">
+      <h1>
+        Order Labs Console
+      </h1>
+    </a>
+
+    <span class="navbar-spacer"></span>
+
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>person</mat-icon>
+      <span fxShow fxHide.xs>
+        {{ userName }}
+      </span>
+    </button>
+
+    <mat-menu
+      #userMenu="matMenu"
+      xPosition="before"
+      yPosition="above"
+      [overlapTrigger]="false"
+    >
+      <a mat-menu-item [routerLink]="['/account/profile']">
+        <mat-icon>person</mat-icon>
+        <span>Account</span>
+      </a>
+
+      <a mat-menu-item [routerLink]="['/auth/login']">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Log out</span>
+      </a>
+    </mat-menu>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="navbar-sidenav-container">
+    <!-- Side nav -->
+    <mat-sidenav
+      #snav
+      [opened]="!mobileQuery.matches"
+      [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [fixedInViewport]="mobileQuery.matches"
+      fixedTopGap="56"
+      class="sidenav"
+    >
+      <mat-nav-list>
+        <a mat-list-item class="item-parent">
+          <mat-icon mat-list-icon>
+            widgets
+          </mat-icon>
+          <p mat-line>Orders</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/orders/list', 'incoming']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            inbox
+          </mat-icon>
+          <p mat-line>Incoming</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/orders/list', 'done']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            done
+          </mat-icon>
+          <p mat-line>Arrangement</p>
+        </a>
+
+        <a mat-list-item class="item-parent">
+          <mat-icon mat-list-icon>
+            person
+          </mat-icon>
+          <p mat-line>Users</p>
+        </a>
+
+        <a
+          class="item-indent"
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/users/list']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            people
+          </mat-icon>
+          <p mat-line>All</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/users/settings', 'roles']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            security
+          </mat-icon>
+          <p mat-line>Roles</p>
+        </a>
+
+        <a mat-list-item class="item-parent">
+          <mat-icon mat-list-icon>
+            settings
+          </mat-icon>
+          <p mat-line>Settings</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/settings/machines']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            home_repair_service
+          </mat-icon>
+          <p mat-line>Machines</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/settings/products']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            account_tree
+          </mat-icon>
+          <p mat-line>Products</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/settings/downtimes']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            timer
+          </mat-icon>
+          <p mat-line>Downtimes</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/settings/workinghours']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            timelapse
+          </mat-icon>
+          <p mat-line>Working hours</p>
+        </a>
+
+        <a
+          class="item-indent"
+          mat-list-item
+          [routerLink]="['/settings/matrix']"
+          routerLinkActive="active"
+        >
+          <mat-icon mat-list-icon>
+            grid_on
+          </mat-icon>
+          <p mat-line>Matrix</p>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <!-- Main content -->
+    <mat-sidenav-content class="sidenav-content">
+      <div class="progress-bar-container">
+        <mat-progress-bar
+          color="warm"
+          mode="indeterminate"
+          *ngIf="spinnerService.visibility | async"
+        >
+        </mat-progress-bar>
+      </div>
+
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

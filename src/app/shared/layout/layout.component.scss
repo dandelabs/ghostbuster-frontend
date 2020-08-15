@@ -1,0 +1,11 @@
+@import "../../../theme.scss";
+
+.mat-list-item:hover
+{
+  color: mat-color($my-app-primary) !important;
+}
+
+.mat-list-item.active
+{
+  color: mat-color($my-app-primary) !important;
+}
