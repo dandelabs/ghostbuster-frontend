@@ -1,3 +1,7 @@
 .mat-row.selected {
     background-color: rgba(0, 0, 0, 0.075);
  }
+
+ table{
+     width: 100%;
+ }

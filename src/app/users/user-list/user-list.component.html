@@ -1,21 +1,151 @@
-<div class="container" fxLayout="row" fxLayoutAlign="center none">
+<div class="container animate" fxLayout="row" fxLayoutAlign="center none">
   <div fxFlex="95%">
-
     <mat-card>
       <mat-card-content>
         <h2>Users</h2>
 
-
-        <div class="container" fxLayout="row" fxLayoutAlign="center none">
-          <div fxFlex="50%" class="text-center no-records animate">
-            <mat-icon>people_outline</mat-icon>
-            <p>No users exist</p>
+        <div fxLayout="row" class="container">
+          <div fxFlex="52" fxLayoutAlign="start center" fxFlexOffset="2">
+            <form [formGroup]="form">
+              <mat-form-field appearance="legacy">
+                <mat-label>Search</mat-label>
+                <input
+                  matInput
+                  placeholder="e.g john smith"
+                  formControlName="search"
+                />
+                <mat-icon matSuffix>search</mat-icon>
+                <mat-hint>By full name or nickname</mat-hint>
+              </mat-form-field>
+            </form>
           </div>
-          <mat-icon> </mat-icon>
+          <div fxFlex="44" fxLayoutAlign="end center">
+            <button
+              mat-raised-button
+              color="accent"
+              class="action-user"
+              (click)="openDialog()"
+              [disabled]="!isIndeterminate && !isAllSelected()"
+            >
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              class="action-user"
+              (click)="goToNewUser()"
+            >
+              <mat-icon>add</mat-icon>
+              New
+            </button>
+          </div>
         </div>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          [hidden]="dataSource.data.length == 0"
+        >
+          <div fxFlex="96" class="mat-elevation-z2 container">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="id">
+                <!-- Id Column -->
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    (change)="masterSelect($event)"
+                    [indeterminate]="isIndeterminate && !isAllSelected()"
+                  >
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let user">
+                  <mat-checkbox
+                    (click)="$event.stopPropagation()"
+                    [checked]="user.checked"
+                    [(ngModel)]="user.checked"
+                    (change)="isIndeterminate = $event.checked"
+                  >
+                  </mat-checkbox>
+                </td>
+              </ng-container>
 
+              <!-- Name Column -->
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Full name
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let user"
+                  [routerLink]="['/users/form/', user.id]"
+                >
+                  {{ user.firstName + " " + user.lastName }}
+                </td>
+              </ng-container>
+
+              <!-- Nickname Column -->
+              <ng-container matColumnDef="nick_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Nickname
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let user"
+                  [routerLink]="['/users/form/', user.id]"
+                >
+                  {{ user.nick_name }}
+                </td>
+              </ng-container>
+
+              <!-- Salt Column -->
+              <ng-container matColumnDef="salt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Salt</th>
+                <td
+                  mat-cell
+                  *matCellDef="let user"
+                  [routerLink]="['/users/form/', user.id]"
+                >
+                  {{ user.salt }}
+                </td>
+              </ng-container>
+
+              <!-- State Column -->
+              <ng-container matColumnDef="statusId">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+                <td
+                  mat-cell
+                  *matCellDef="let user"
+                  [routerLink]="['/users/form/', user.id]"
+                >
+                  {{ user.statusId == 1 ? "Active" : "Inactive" }}
+                </td>
+              </ng-container>
+
+              <!-- Created date Column -->
+              <ng-container matColumnDef="createdDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Created date
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let user"
+                  [routerLink]="['/users/form/', user.id]"
+                >
+                  {{ moment(user.createdDate || "").format("DD-MM-YYYY") }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <mat-paginator
+              [pageSizeOptions]="[10, 20]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
-
   </div>
 </div>

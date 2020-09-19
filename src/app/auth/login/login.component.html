@@ -6,14 +6,11 @@
             <mat-card-content>
 
                 <mat-form-field class="full-width">
-                    <input id="emailInput" matInput placeholder="Email" formControlName="email" autocomplete="email"
-                        type="email">
+                    <input id="usernameInput" matInput placeholder="Username" formControlName="username" autocomplete="username"
+                        type="text">
 
-                    <mat-error id="invalidEmailError" *ngIf="loginForm.controls['email'].hasError('email')">
-                        Please enter a valid email address
-                    </mat-error>
-                    <mat-error id="requiredEmailError" *ngIf="loginForm.controls['email'].hasError('required')">
-                        Email is
+                    <mat-error id="requiredUsernameError" *ngIf="loginForm.controls['username'].hasError('required')">
+                        Username is
                         <strong>required</strong>
                     </mat-error>
 
@@ -22,14 +19,14 @@
                 <mat-form-field class="full-width">
                     <input id="passwordInput" matInput placeholder="Password" formControlName="password" type="password"
                         autocomplete="current-password">
-                    <mat-error id="requiredPasswordError" *ngIf="loginForm.controls['email'].hasError('required')">
+                    <mat-error id="requiredPasswordError" *ngIf="loginForm.controls['username'].hasError('required')">
                         Password is
                         <strong>required</strong>
                     </mat-error>
                 </mat-form-field>
 
                 <div class="full-width">
-                    <mat-slide-toggle formControlName="rememberMe">Remember my email address</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="rememberMe">Remember my username</mat-slide-toggle>
                 </div>
 
             </mat-card-content>

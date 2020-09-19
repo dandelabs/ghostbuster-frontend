@@ -1,0 +1,13 @@
+table {
+  width: 100%;
+  min-width: 550px;
+}
+
+.overflow-table {
+  max-height: 250px;
+  overflow: auto;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}

@@ -1,1 +1,89 @@
-<p>downtime-form works!</p>
+<div class="container animate" fxLayout="row wrap" fxLayoutAlign="center none">
+  <div fxFlex="95%">
+    <mat-card>
+      <mat-card-content>
+        <h2>New downtime type</h2>
+
+        <div fxLayout="row wrap" fxLayoutAlign="center center">
+          <div fxLayout="column" fxLayoutAlign="end center">
+            <form [formGroup]="form">
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Down type A"
+                  formControlName="name"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  placeholder="Description A"
+                  formControlName="description"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Type</mat-label>
+                <input matInput placeholder="Type A" formControlName="type" />
+              </mat-form-field>
+              <mat-radio-group
+                aria-label="Select an option"
+                formControlName="status"
+              >
+                <mat-radio-button value="1" checked="true"
+                  >Active</mat-radio-button
+                >
+                <mat-radio-button value="0">Inactive</mat-radio-button>
+              </mat-radio-group>
+            </form>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="center center">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="form.invalid"
+            (click)="create(this.form)"
+          >
+            Save
+          </button>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxLayout="column" fxLayoutAlign="center center" fxFlex="100">
+              <div fxLayout="row" fxFlexAlign="center center" class="header-list">
+                <div fxFlex="50">
+                  <h4>Name</h4>
+                </div>
+                <div fxFlex="40">
+                  <h4>Type</h4>
+                </div>
+              </div>
+              <mat-list>
+                <mat-list-item *ngFor="let downtime of downtimes">
+                  <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100">
+                    <div fxFlex="40">
+                      <span slot="start">{{ downtime.name }}</span>
+                    </div>
+                    <div fxFlex="50">
+                      <span>
+                        {{ downtime.subject }}
+                      </span>
+                    </div>
+                    <div fxFlex="10">
+                      <button mat-icon-button (click)="openDialog(downtime.id)">
+                        <mat-icon matListIcon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

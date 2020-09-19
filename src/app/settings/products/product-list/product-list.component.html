@@ -5,6 +5,128 @@
         <mat-card-content>
           <h2>Products workflow</h2>
   
+          <div fxLayout="row" class="container">
+            <div fxFlex="54" fxLayoutAlign="start center" fxFlexOffset="2">
+              <form [formGroup]="form">
+                <mat-form-field appearance="legacy">
+                  <mat-label>Search</mat-label>
+                  <input
+                    matInput
+                    placeholder="e.g machine 1"
+                    formControlName="search"
+                  />
+                  <mat-icon matSuffix>search</mat-icon>
+                  <mat-hint>By state or machine</mat-hint>
+                </mat-form-field>
+              </form>
+            </div>
+  
+            <div fxFlex="42" fxLayoutAlign="end center">
+              <button
+                mat-raised-button
+                color="warn"
+                class="action-machine"
+                (click)="goToNewItem()"
+              >
+                <mat-icon>post_add</mat-icon>
+                Add item
+              </button>
+              <button
+                mat-raised-button
+                color="accent"
+                class="action-product"
+                (click)="openDialog()"
+                [disabled]="!isIndeterminate && !isAllSelected()"
+              >
+                <mat-icon>delete</mat-icon>
+                Delete
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                class="action-product"
+                (click)="goToNewProduct()"
+              >
+                <mat-icon>add</mat-icon>
+                New
+              </button>
+            </div>
+          </div>
+  
+          <div fxLayout="row" class="container">
+            <div fxFlex="96" class="mat-elevation-z2 container" fxFlexOffset="2">
+              <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="id">
+                  <!-- Id Column -->
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="masterSelect($event)"
+                      [indeterminate]="isIndeterminate && !isAllSelected()"
+                    >
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let product">
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      [checked]="product.checked"
+                      [(ngModel)]="product.checked"
+                      (change)="isIndeterminate = $event.checked"
+                    >
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- item Column -->
+                <ng-container matColumnDef="itemName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Name</th>
+                  <td mat-cell *matCellDef="let product">
+                    {{ product.itemName }}
+                  </td>
+                </ng-container>
+
+                <!-- machine Column -->
+                <ng-container matColumnDef="machineName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Machine Name</th>
+                  <td mat-cell *matCellDef="let product">
+                    {{ product.machineName }}
+                  </td>
+                </ng-container>
+                
+                <!-- Time Column -->
+                <ng-container matColumnDef="stdTime">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+                  <td mat-cell *matCellDef="let product">
+                    {{ product.stdTime }}
+                  </td>
+                </ng-container>
+  
+                <!-- From status Column -->
+                <ng-container matColumnDef="fromStatusId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+                  <td mat-cell *matCellDef="let product">
+                    {{ product.fromStatusName }}
+                  </td>
+                </ng-container>
+  
+                <!-- To status Column -->
+                <ng-container matColumnDef="toStatusId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+                  <td mat-cell *matCellDef="let product">
+                    {{ product.toStatusName }}
+                  </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+  
+              <mat-paginator
+                [pageSizeOptions]="[10, 20]"
+                showFirstLastButtons
+              ></mat-paginator>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
   

@@ -1,70 +1,76 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { EMPTY, of } from 'rxjs';
-import 'rxjs/add/operator/delay';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { FormControl, Validators, FormGroup } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
+import { EMPTY, of } from "rxjs";
+import "rxjs/add/operator/delay";
 
-import { AuthenticationService } from '../../core/services/auth.service';
-import { NotificationService } from '../../core/services/notification.service';
+import { AuthenticationService } from "../../core/services/auth.service";
+import { NotificationService } from "../../core/services/notification.service";
+import { UserManager } from "src/app/core/models/models.module";
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
 })
 export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
+  loading: boolean;
 
-    loginForm: FormGroup;
-    loading: boolean;
+  constructor(
+    private router: Router,
+    private titleService: Title,
+    private notificationService: NotificationService,
+    private authenticationService: AuthenticationService
+  ) {}
 
-    constructor(private router: Router,
-        private titleService: Title,
-        private notificationService: NotificationService,
-        private authenticationService: AuthenticationService) {
-    }
+  ngOnInit() {
+    this.titleService.setTitle("Login");
+    this.authenticationService.logout();
+    this.createForm();
+  }
 
-    ngOnInit() {
-        this.titleService.setTitle('Login');
-        this.authenticationService.logout();
-        this.createForm();
-    }
+  private createForm() {
+    const savedUsername = localStorage.getItem("savedUsername");
 
-    private createForm() {
-        const savedUserEmail = localStorage.getItem('savedUserEmail');
+    this.loginForm = new FormGroup({
+      username: new FormControl(savedUsername, [Validators.required]),
+      password: new FormControl("", Validators.required),
+      rememberMe: new FormControl(savedUsername !== null),
+    });
+  }
 
-        this.loginForm = new FormGroup({
-            email: new FormControl(savedUserEmail, [Validators.required, Validators.email]),
-            password: new FormControl('', Validators.required),
-            rememberMe: new FormControl(savedUserEmail !== null)
-        });
-    }
+  login() {
+    const username = this.loginForm.get("username").value;
+    const password = this.loginForm.get("password").value;
+    const rememberMe = this.loginForm.get("rememberMe").value;
 
-    login() {
-        const email = this.loginForm.get('email').value;
-        const password = this.loginForm.get('password').value;
-        const rememberMe = this.loginForm.get('rememberMe').value;
+    this.loading = true;
+    this.authenticationService
+      .login(username.toLowerCase(), password)
+      .subscribe(
+        (data) => {
+          if (rememberMe) {
+            localStorage.setItem("savedUsername", username);
+          } else {
+            localStorage.removeItem("savedUsername");
+          }
 
-        this.loading = true;
-        this.authenticationService
-            .login(email.toLowerCase(), password)
-            .subscribe(
-                data => {
-                    if (rememberMe) {
-                        localStorage.setItem('savedUserEmail', email);
-                    } else {
-                        localStorage.removeItem('savedUserEmail');
-                    }
-                    this.router.navigate(['/']);
-                },
-                error => {
-                    this.notificationService.openSnackBar(error.error);
-                    this.loading = false;
-                }
-            );
-    }
+          if (data) {
+            const user: UserManager = data["result"] as UserManager;
+            this.authenticationService.setCurrentUser(user);
+            this.router.navigate(["/"]);
+          }
+        },
+        (error) => {
+          this.notificationService.openSnackBar(error.error);
+          this.loading = false;
+        }
+      );
+  }
 
-    resetPassword() {
-        this.router.navigate(['/auth/password-reset-request']);
-    }
+  resetPassword() {
+    this.router.navigate(["/auth/password-reset-request"]);
+  }
 }

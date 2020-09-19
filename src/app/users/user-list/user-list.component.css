@@ -1,0 +1,11 @@
+table {
+  width: 100%
+}
+
+tr {
+  cursor: pointer;
+}
+
+.action-user{
+  margin-left: 10px;
+}

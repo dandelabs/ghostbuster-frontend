@@ -24,8 +24,13 @@ const appRoutes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: 'account',
+        loadChildren: './account/account.module#AccountModule',
+        canActivate: [AuthGuard]
+    },
+    {
         path: '**',
-        redirectTo: 'orders',
+        redirectTo: 'orders/list/incoming',
         pathMatch: 'full'
     }
 ];

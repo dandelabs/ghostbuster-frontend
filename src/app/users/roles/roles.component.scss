@@ -1,0 +1,11 @@
+@import "../../../theme.scss";
+
+.title-accent {
+  background-color: mat-color($my-app-light) !important;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.cell{
+    border-bottom: 1px solid #dddddd;
+}

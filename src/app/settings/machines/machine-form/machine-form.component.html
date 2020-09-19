@@ -1,1 +1,68 @@
-<p>machine-form works!</p>
+<div class="container animate" fxLayout="row" fxLayoutAlign="center none">
+  <div fxFlex="95%">
+    <mat-card>
+      <mat-card-content>
+        <h2>New machine</h2>
+
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxLayout="column" fxLayoutAlign="end center" fxFlex="40">
+            <form [formGroup]="form">
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Machine A"
+                  formControlName="name"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Primary state</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedPrimaryStatus"
+                  formControlName="primaryStatus"
+                >
+                  <mat-option>--</mat-option>
+                  <mat-option *ngFor="let state of states" [value]="state.id">
+                    {{ state.description }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="form.get('primaryStatus').hasError('required')"
+                  >Please choose a state</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Secondary state</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedSecondaryStatus"
+                  formControlName="SecondaryStatus"
+                >
+                  <mat-option>--</mat-option>
+                  <mat-option *ngFor="let state of states" [value]="state.id">
+                    {{ state.description }}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="form.get('SecondaryStatus').hasError('required')"
+                  >Please choose a state</mat-error
+                >
+              </mat-form-field>
+            </form>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="form.invalid"
+            (click)="createMachine(this.form)"
+          >
+            Save
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

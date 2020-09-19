@@ -1,0 +1,90 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+  <div fxFlex="95%">
+    <mat-card>
+      <mat-card-content>
+        <h2>{{ form.controls.firstName.value !== '' ? (form.controls.firstName.value + ' ' + form.controls.lastName.value) : 'Create new user' }} </h2>
+        <img src="assets/user.png" [alt]="fullName">
+        <form [formGroup]="form">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxLayout="column" fxLayoutAlign="end center" fxFlex="40">
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>First name</mat-label>
+                <input
+                  matInput
+                  placeholder="John"
+                  formControlName="firstName"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Last name</mat-label>
+                <input matInput placeholder="Dale" formControlName="lastName" />
+              </mat-form-field>
+              <mat-form-field appearance="legacy" class="full-width">
+                <mat-label>Nick name</mat-label>
+                <input
+                  [readonly]="id > 0"
+                  matInput
+                  placeholder="john.dale"
+                  formControlName="nickName"
+                />
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input
+                  matInput
+                  placeholder="Password"
+                  formControlName="password"
+                  [type]="hidePassword ? 'password' : 'text'"
+                  autocomplete="current-password"
+                />
+                <mat-icon matSuffix (click)="hidePassword = !hidePassword">
+                  {{ hidePassword ? "visibility" : "visibility_off" }}
+                </mat-icon>
+
+                <mat-error
+                  *ngIf="form.controls['password'].hasError('required')"
+                >
+                  Please enter a password
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="full-width">
+                <input
+                  matInput
+                  placeholder="Confirm password"
+                  formControlName="reEnterPassword"
+                  [type]="hidePassword ? 'password' : 'text'"
+                  autocomplete="current-password"
+                  [errorStateMatcher]="matcher"
+                />
+                <mat-icon matSuffix (click)="hidePassword = !hidePassword">
+                  {{ hidePassword ? "visibility" : "visibility_off" }}
+                </mat-icon>
+                <mat-error *ngIf="form.hasError('notSame')">
+                  Passwords don´t match
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Date of Birth</mat-label>
+                <input
+                  matInput
+                  [max]="maxDate"
+                  [min]="minDate"
+                  [matDatepicker]="picker"
+                  formControlName="dateofbirth"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <button mat-raised-button color="accent" (click)="deleteUser()" *ngIf="id > 0">Delete</button>
+            <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="id > 0 ? saveUser(this.form) : createUser(this.form)">Save</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
